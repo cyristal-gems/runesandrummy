@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Runes & Rummy, a fantasy Gin Rummy duel against The Dark Wizard."
+    />
+    <title>Runes & Rummy</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="theme-light">
+    <audio id="bgMusic" loop autoplay preload="auto"></audio>
+
+    <main class="app-shell" dir="ltr">
+      <aside class="tracker" aria-label="Game tracker">
+        <div class="tracker-time" id="trackerTime">Time 00:00</div>
+        <ol class="move-list" id="moveList"></ol>
+      </aside>
+
+      <section class="game-stage" aria-label="Runes and Rummy game board">
+        <header class="hero-copy">
+          <div class="title-block">
+            <h1>Runes &amp; Rummy</h1>
+            <p>
+              Gather enchanted rune cards into spellbound sets and moonlit
+              runs before The Dark Wizard completes his curse. Draw from the
+              rune deck or reclaim the discard pile, banish one card each turn,
+              and shrink your Deadwood; when your hand is woven with magic,
+              call Knock at 10 or less or Gin at 0 to claim the duel.
+            </p>
+          </div>
+
+          <nav class="settings" aria-label="Game settings">
+            <label>
+              <span>Audio</span>
+              <select id="audioSelect">
+                <option value="on">On</option>
+                <option value="off">Off</option>
+              </select>
+            </label>
+            <label>
+              <span>Levels</span>
+              <select id="levelSelect">
+                <option value="novice">Novice</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </label>
+            <label>
+              <span>Hand Dealt</span>
+              <select id="handSizeSelect">
+                <option value="7">7 Cards</option>
+                <option value="10">10 Cards</option>
+              </select>
+            </label>
+            <label>
+              <span>Mode</span>
+              <select id="modeSelect">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </label>
+          </nav>
+
+        </header>
+
+        <section class="duel-controls" aria-label="Duel controls">
+          <div class="timer" id="timerDisplay">00:00</div>
+          <div class="duel-buttons">
+            <button type="button" id="pauseButton">Pause</button>
+            <button type="button" id="restartButton">Restart</button>
+            <button type="button" id="newDuelButton">New Duel</button>
+          </div>
+        </section>
+
+        <section class="hand-area cpu-area" aria-label="The Dark Wizard hand">
+          <div class="player-label">
+            <span>The Dark Wizard</span>
+            <small id="cpuCount">0 cards</small>
+          </div>
+          <div class="hand cpu-hand" id="cpuHand"></div>
+        </section>
+
+        <section class="table-center" aria-label="Draw and discard decks">
+          <div class="deck-zone">
+            <button class="deck draw-pile" type="button" id="drawPile">
+              <span class="deck-back-symbols">🧚 🐉 ⚔️</span>
+              <span>Draw</span>
+            </button>
+            <button class="deck discard-pile" type="button" id="discardPile">
+              <span id="discardCardPreview"></span>
+              <span>Discard</span>
+            </button>
+          </div>
+
+          <div class="action-panel" aria-label="Score and finish actions">
+            <div class="deadwood-score" id="deadwoodScore">Deadwood 0</div>
+            <div class="finish-buttons">
+              <button type="button" id="knockButton">Knock</button>
+              <button type="button" id="ginButton">Gin</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="hand-area player-area" aria-label="Your hand">
+          <div class="player-label">
+            <span>You</span>
+            <small id="turnHint">Draw a rune card to begin.</small>
+          </div>
+          <div class="hand player-hand" id="playerHand"></div>
+        </section>
+      </section>
+    </main>
+
+    <div class="result-modal" id="resultModal" aria-hidden="true">
+      <div class="result-card" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+        <h2 id="resultTitle">You Win</h2>
+        <p id="resultDetail">New Duel?</p>
+        <div class="modal-buttons">
+          <button type="button" id="modalYesButton">Yes</button>
+          <button type="button" id="modalNoButton">No</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

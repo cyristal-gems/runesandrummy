@@ -1,0 +1,905 @@
+:root {
+  color-scheme: light;
+  --page-bg: #102216;
+  --panel: #fff8df;
+  --panel-strong: #f4e7bb;
+  --panel-soft: #fffdf4;
+  --text: #1d2118;
+  --muted: #596048;
+  --line: #6f5c25;
+  --button-bg: #f7ebc7;
+  --button-hover: #fff4d4;
+  --button-text: #20190a;
+  --accent: #a36d08;
+  --accent-2: #23683f;
+  --board-text: #fff1bc;
+  --board-muted: #ffe39a;
+  --board-line: #ffd76f;
+  --timer-glow: #ffcf57;
+  --title-sheen-a: #795000;
+  --title-sheen-b: #fff2a6;
+  --title-sheen-c: #b87a09;
+  --win: #27683c;
+  --lose: #9d3c22;
+  --shadow: #19150a;
+  --card: #fffaf0;
+  --card-ink: #24190c;
+  --card-back: #263e28;
+  --card-back-line: #f5d779;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--page-bg);
+  background-image: url("assets/forest.jpg");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--text);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body.theme-dark {
+  color-scheme: dark;
+  --page-bg: #08101d;
+  --panel: #121a2c;
+  --panel-strong: #1b2740;
+  --panel-soft: #202d49;
+  --text: #f2f5ff;
+  --muted: #c4ccdb;
+  --line: #7887a7;
+  --button-bg: #22304b;
+  --button-hover: #2c3c5d;
+  --button-text: #f8fbff;
+  --accent: #9fc7ff;
+  --accent-2: #d5dbea;
+  --board-text: #eef6ff;
+  --board-muted: #c9dcff;
+  --board-line: #9bc4ff;
+  --timer-glow: #5eb6ff;
+  --title-sheen-a: #aeb8c8;
+  --title-sheen-b: #ffffff;
+  --title-sheen-c: #7d889b;
+  --win: #80b8ff;
+  --lose: #d1889c;
+  --shadow: #02050b;
+  --card: #f5f7fb;
+  --card-ink: #111827;
+  --card-back: #11172a;
+  --card-back-line: #c9d8ff;
+  background-image: url("assets/castle.jpg");
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+button:disabled:not(.card):not(.deck) {
+  opacity: 0.56;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(220px, 285px) minmax(0, 1fr);
+  gap: 18px;
+  min-height: 100vh;
+  padding: 18px;
+}
+
+.tracker {
+  align-self: stretch;
+  min-height: calc(100vh - 36px);
+  padding: 18px;
+  overflow: hidden;
+  border: 2px solid var(--board-line);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--board-text);
+  box-shadow: 0 18px 42px var(--shadow);
+  text-shadow: 0 2px 4px #000000;
+}
+
+.tracker-time {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--board-line);
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.move-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: calc(100vh - 110px);
+  margin: 14px 0 0;
+  padding: 0 0 0 22px;
+  overflow: auto;
+  color: var(--board-text);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.move-list li::marker {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.game-stage {
+  display: grid;
+  grid-template-rows: auto auto minmax(116px, auto) minmax(154px, auto) minmax(130px, auto);
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
+  border: 2px solid var(--board-line);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--board-text);
+  box-shadow: 0 18px 46px var(--shadow);
+  text-shadow: 0 2px 4px #000000;
+}
+
+.hero-copy {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: start;
+  min-height: 190px;
+  padding-top: 78px;
+}
+
+.title-block {
+  direction: ltr;
+  justify-self: center;
+  max-width: 940px;
+  text-align: center;
+}
+
+.title-block h1 {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  background-image: linear-gradient(
+    110deg,
+    var(--title-sheen-a) 0%,
+    var(--title-sheen-b) 36%,
+    var(--title-sheen-c) 58%,
+    var(--title-sheen-b) 74%,
+    var(--title-sheen-a) 100%
+  );
+  background-size: 240% 100%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.35rem, 5vw, 5.2rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.94;
+  text-shadow: 0 1px 0 var(--shadow);
+  animation: shimmer 4.5s linear infinite;
+}
+
+.title-block p {
+  max-width: 740px;
+  margin: 12px auto 0;
+  color: var(--board-text);
+  font-size: clamp(0.96rem, 1.6vw, 1.15rem);
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 240% 50%;
+  }
+}
+
+.settings {
+  position: absolute;
+  top: 0;
+  right: 0;
+  justify-self: end;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(104px, 1fr));
+  gap: 8px;
+  width: min(100%, 610px);
+  z-index: 2;
+}
+
+.settings label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  color: var(--board-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.settings select {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-size: 0.92rem;
+  font-weight: 750;
+}
+
+.duel-controls {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 4px 0 2px;
+}
+
+.timer {
+  min-width: 126px;
+  padding: 8px 18px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--panel-soft);
+  color: var(--accent);
+  font-size: 1.55rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  text-align: center;
+  box-shadow:
+    0 0 16px var(--timer-glow),
+    0 0 34px var(--timer-glow);
+}
+
+.duel-buttons,
+.finish-buttons,
+.modal-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.duel-buttons button,
+.finish-buttons button,
+.modal-buttons button {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-weight: 850;
+  letter-spacing: 0;
+  box-shadow: 0 2px 0 var(--line);
+}
+
+.duel-buttons button {
+  min-width: 92px;
+  padding: 0 14px;
+}
+
+.duel-buttons button:hover,
+.finish-buttons button:hover,
+.modal-buttons button:hover,
+.deck:hover,
+.card:hover {
+  background-color: var(--button-hover);
+}
+
+.hand-area {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--board-line);
+  border-radius: 8px;
+  background-color: transparent;
+}
+
+.player-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: baseline;
+  color: var(--board-text);
+  font-weight: 900;
+}
+
+.player-label small {
+  color: var(--board-muted);
+  font-size: 0.88rem;
+  font-weight: 750;
+  text-align: right;
+}
+
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  min-height: 104px;
+}
+
+.table-center {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(178px, 235px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--board-line);
+  border-radius: 8px;
+  background-color: transparent;
+}
+
+.deck-zone {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(16px, 4vw, 42px);
+  min-width: 0;
+}
+
+.deck,
+.card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 108px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--card);
+  color: var(--card-ink);
+  box-shadow: 0 8px 16px var(--shadow);
+  user-select: none;
+}
+
+.deck {
+  gap: 4px;
+  padding: 8px;
+  color: var(--button-text);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.draw-pile {
+  overflow: hidden;
+  background-color: var(--card-back);
+  color: var(--card-back-line);
+}
+
+.draw-pile > span {
+  position: relative;
+  z-index: 1;
+}
+
+body.theme-dark .draw-pile {
+  background:
+    linear-gradient(145deg, #24375d 0%, #162341 52%, #0b1227 100%);
+  border-color: #d7e7ff;
+  color: #f7fbff;
+  box-shadow:
+    0 8px 16px #02050b,
+    0 0 18px #5eb6ff;
+}
+
+body.theme-dark .draw-pile::before {
+  border-color: #d7e7ff;
+}
+
+.draw-pile::before,
+.card-back::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 2px solid var(--card-back-line);
+  border-radius: 6px;
+}
+
+.deck-back-symbols {
+  z-index: 1;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.discard-pile {
+  background-color: var(--card);
+}
+
+#discardCardPreview {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  font-size: 1.7rem;
+  font-weight: 900;
+}
+
+.action-panel {
+  grid-column: 3;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.deadwood-score {
+  width: 100%;
+  padding: 9px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--panel);
+  color: var(--accent);
+  font-weight: 950;
+  text-align: center;
+}
+
+body.theme-light .deadwood-score {
+  border-color: #f3d57a;
+  background-color: #4f2d0d;
+  color: #fff2b8;
+  text-shadow: 0 1px 2px #1c1004;
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.24),
+    0 0 10px rgba(212, 175, 55, 0.32);
+}
+
+.finish-buttons {
+  width: 100%;
+}
+
+.finish-buttons button {
+  flex: 1 1 76px;
+  padding: 0 14px;
+}
+
+.card {
+  grid-template-rows: 22px 1fr 22px;
+  padding: 7px;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+  opacity: 1;
+}
+
+body.theme-dark .card,
+body.theme-dark .deck,
+body.theme-dark .card:disabled,
+body.theme-dark .deck:disabled {
+  opacity: 1;
+}
+
+.card.is-selected {
+  transform: translateY(-9px);
+  box-shadow:
+    0 11px 20px var(--shadow),
+    0 0 0 3px var(--accent);
+}
+
+.card.meld-set {
+  box-shadow:
+    0 8px 16px var(--shadow),
+    inset 0 0 0 4px var(--accent-2);
+}
+
+.card.meld-run {
+  box-shadow:
+    0 8px 16px var(--shadow),
+    inset 0 0 0 4px var(--accent);
+}
+
+.card.meld-set.meld-run {
+  box-shadow:
+    0 8px 16px var(--shadow),
+    inset 0 0 0 4px var(--accent-2),
+    0 0 0 3px var(--accent);
+}
+
+.card-rank,
+.card-suit-small {
+  justify-self: start;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.card-suit-small {
+  justify-self: end;
+}
+
+.card-suit {
+  font-size: 2.05rem;
+  line-height: 1;
+}
+
+.card-back {
+  overflow: hidden;
+  grid-template-rows: 1fr;
+  background-color: var(--card-back);
+  color: var(--card-back-line);
+}
+
+.card-back .back-inner {
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  font-size: 0.8rem;
+  font-weight: 950;
+  text-align: center;
+}
+
+.card-back .back-runes {
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.wizard-card-back {
+  overflow: hidden;
+  grid-template-rows: 1fr;
+  background:
+    radial-gradient(circle at 50% 44%, #4d456f 0 15%, #1f1a35 16% 54%, #090813 55% 100%);
+  color: #d8d2ff;
+  border-color: #a79de4;
+}
+
+.wizard-card-back::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 2px solid #d8d2ff;
+  border-radius: 6px;
+}
+
+.wizard-card-back::after {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px solid #8f84d4;
+  border-radius: 50%;
+}
+
+.wizard-card-back .wizard-sigil {
+  z-index: 1;
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.wizard-card-back .wizard-stars {
+  font-size: 0.78rem;
+  letter-spacing: 0;
+}
+
+.result-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  place-items: center;
+  padding: 18px;
+  background-color: #070707;
+}
+
+.result-modal.is-open {
+  display: grid;
+}
+
+.result-card {
+  width: min(440px, 100%);
+  padding: 28px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--panel);
+  color: var(--text);
+  text-align: center;
+  box-shadow:
+    0 22px 60px #000000,
+    0 0 32px var(--timer-glow);
+}
+
+.result-card.win {
+  border-color: var(--win);
+}
+
+.result-card.lose {
+  border-color: var(--lose);
+}
+
+.result-card h2 {
+  margin: 0;
+  color: var(--win);
+  font-size: clamp(2.2rem, 8vw, 4rem);
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0;
+}
+
+.result-card.lose h2 {
+  color: var(--lose);
+}
+
+.result-card p {
+  margin: 12px 0 20px;
+  font-size: 1.2rem;
+  font-weight: 850;
+}
+
+.modal-buttons button {
+  min-width: 98px;
+  padding: 0 18px;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .tracker {
+    min-height: auto;
+  }
+
+  .move-list {
+    max-height: 170px;
+    height: auto;
+  }
+
+  .hero-copy {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .settings {
+    position: static;
+    justify-self: stretch;
+    grid-template-columns: repeat(2, minmax(128px, 1fr));
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 680px) {
+  .app-shell {
+    padding: 10px;
+  }
+
+  .game-stage,
+  .tracker {
+    padding: 12px;
+  }
+
+  .settings {
+    grid-template-columns: 1fr;
+  }
+
+  .table-center {
+    grid-template-columns: 1fr;
+  }
+
+  .deck-zone,
+  .action-panel {
+    grid-column: auto;
+  }
+
+  .card,
+  .deck {
+    width: 62px;
+    height: 92px;
+  }
+
+  .card-suit {
+    font-size: 1.66rem;
+  }
+}
+
+
+
+
+
+body.theme-dark .discard-pile,
+body.theme-dark .discard-pile span,
+body.theme-dark .discard-pile-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  word-break: break-word;
+  overflow: hidden;
+  font-size: 0.9rem;
+  padding: 4px;
+}
+
+
+
+
+
+/* Force identical discard pile layout in dark mode */
+
+
+body.theme-dark .discard-pile .discard-label,
+body.theme-dark .discard-pile span:last-child {
+  position: static !important;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+
+/* Match Dark Wizard cards to theme */
+body.theme-dark .wizard-card,
+body.theme-dark .cpu-card {
+  background: linear-gradient(
+    145deg,
+    #25385f 0%,
+    #182746 55%,
+    #0d152b 100%
+  );
+  border: 2px solid #d8e7ff;
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.45),
+    0 0 12px rgba(94,182,255,0.35);
+}
+
+body.theme-light .wizard-card,
+body.theme-light .cpu-card {
+  background: linear-gradient(
+    145deg,
+    #f6efd2 0%,
+    #ead28b 55%,
+    #c49a28 100%
+  );
+  border: 2px solid #d4a52d;
+}
+
+/* Match discard pile to exact theme styles */
+body.theme-dark .discard-pile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: linear-gradient(
+    145deg,
+    #25385f 0%,
+    #182746 55%,
+    #0d152b 100%
+  );
+  border: 2px solid #d8e7ff;
+  color: #f7fbff;
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.45),
+    0 0 12px rgba(94,182,255,0.35);
+}
+
+body.theme-light .discard-pile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+body.theme-dark .discard-pile .discard-label,
+body.theme-dark .discard-pile span:last-child {
+  position: static !important;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+
+
+
+
+/* Proper themed Dark Wizard cards */
+body.theme-light .cpu-card,
+body.theme-light .wizard-card,
+body.theme-light .cpu-hand .card-back {
+  background: linear-gradient(
+    145deg,
+    #6b4a12 0%,
+    #8b5e1a 45%,
+    #d4af37 100%
+  ) !important;
+  border: 2px solid #f3d57a !important;
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.22),
+    0 0 10px rgba(212,175,55,0.38) !important;
+}
+
+body.theme-dark .cpu-card,
+body.theme-dark .wizard-card,
+body.theme-dark .cpu-hand .card-back {
+  background: linear-gradient(
+    145deg,
+    #1b2742 0%,
+    #24385f 45%,
+    #314d80 100%
+  ) !important;
+  border: 2px solid #d8e7ff !important;
+}
+
+
+/* FINAL Light Mode Wizard Card Theme */
+body.theme-light .card-back,
+body.theme-light .cpu-card,
+body.theme-light .wizard-card,
+body.theme-light .cpu-hand .card-back {
+  background:
+    linear-gradient(
+      145deg,
+      #5c3a0d 0%,
+      #8b5a18 45%,
+      #d4af37 100%
+    ) !important;
+  border: 2px solid #f2d27a !important;
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.22),
+    0 0 12px rgba(212,175,55,0.45) !important;
+}
+
+/* FINAL Light Mode Dark Wizard Card Theme */
+body.theme-light .wizard-card-back {
+  background:
+    radial-gradient(
+      circle at 50% 44%,
+      #f4d778 0 16%,
+      #9a651c 17% 58%,
+      #4f2d0d 59% 100%
+    ) !important;
+  border-color: #f3d57a !important;
+  color: #fff0b0 !important;
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.24),
+    0 0 12px rgba(212,175,55,0.48) !important;
+}
+
+body.theme-light .wizard-card-back::before {
+  border-color: #ffe69c !important;
+}
+
+body.theme-light .wizard-card-back::after {
+  border-color: #d4a52d !important;
+}
+
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+    background-position: center top;
+    min-height: 100dvh;
+  }
+}
